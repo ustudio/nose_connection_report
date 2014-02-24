@@ -225,6 +225,9 @@ class ConnectionReportPlugin(nose.plugins.base.Plugin):
 
     def report(self, stream):
         for test, connections in self._test_connections:
+            if len(connections) == 0:
+                continue
+
             stream.write(test.id() + "\n")
 
             for connection in connections:

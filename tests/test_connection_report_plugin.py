@@ -77,12 +77,50 @@ Test2
 
         plugin.begin()
 
-        plugin.add_test_connections(test1, [])
+        plugin.add_test_connections(test1, [{
+            "host": "127.0.0.1",
+            "port": 1234
+        }])
 
         plugin.begin()
+
+        plugin.add_test_connections(test2, [{
+            "host": "127.0.0.1",
+            "port": 1234
+        }])
+
+        plugin.report(output)
+
+        self.assertEqual(
+            """Test2
+    127.0.0.1:1234
+""",
+            output.getvalue())
+
+    def test_tests_without_connections_are_not_reported(self):
+        output = StringIO()
+
+        test1 = mock.MagicMock()
+        test2 = mock.MagicMock()
+
+        test1.id.return_value = "Test1"
+        test2.id.return_value = "Test2"
+
+        plugin = ConnectionReportPlugin()
+
+        plugin.begin()
+
+        plugin.add_test_connections(test1, [{
+            "host": "127.0.0.1",
+            "port": 1234
+        }])
 
         plugin.add_test_connections(test2, [])
 
         plugin.report(output)
 
-        self.assertEqual("Test2\n", output.getvalue())
+        self.assertEqual(
+            """Test1
+    127.0.0.1:1234
+""",
+            output.getvalue())
