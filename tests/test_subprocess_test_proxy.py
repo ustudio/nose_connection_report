@@ -19,7 +19,7 @@ class TestSubprocessTestProxy(unittest.TestCase):
         cwd = os.getcwd()
 
         mock_popen = mock_popen_class.return_value
-        mock_popen.stdout.read.return_value = ''
+        mock_popen.stdout.read.return_value = ""
 
         proxy = SubprocessTestProxy(test)
 
@@ -27,11 +27,11 @@ class TestSubprocessTestProxy(unittest.TestCase):
 
         mock_popen_class.assert_called_with(
             [
-                'strace',
-                '-e', 'trace=connect',
+                "strace",
+                "-e", "trace=connect",
                 base_command,
-                '--with-process-isolation-reporter',
-                'foo.py:TestFoo.test_something'
+                "--with-process-isolation-reporter",
+                "foo.py:TestFoo.test_something"
             ],
             cwd=cwd,
             stdout=subprocess.PIPE,
