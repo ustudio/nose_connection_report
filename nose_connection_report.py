@@ -195,7 +195,7 @@ class SubprocessTestProxy(object):
         self._plugin.add_test_connections(self._test, connections)
 
 
-class ConnectionReportPlugin(nose.plugins.Plugin):
+class ConnectionReportPlugin(nose.plugins.base.Plugin):
 
     """Run each test in a separate process."""
 
@@ -206,14 +206,26 @@ class ConnectionReportPlugin(nose.plugins.Plugin):
         self._test = None
         self._test_proxy = None
 
+        self._test_connections = []
+
     def configure(self, options, config):
         nose.plugins.Plugin.configure(self, options, config)
 
     def prepareTestCase(self, test):
         self._test = test
-        self._test_proxy = SubprocessTestProxy(test)
+        self._test_proxy = SubprocessTestProxy(self, test)
         return self._test_proxy
 
     def afterTest(self, test):
         self._test_proxy = None
         self._test = None
+
+    def report(self, stream):
+        for test, connections in self._test_connections:
+            stream.write(test.id() + "\n")
+
+            for connection in connections:
+                stream.write("    {0}:{1}\n".format(connection["host"], connection["port"]))
+
+    def add_test_connections(self, test, connections):
+        self._test_connections.append((test, connections))
