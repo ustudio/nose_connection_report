@@ -211,6 +211,9 @@ class ConnectionReportPlugin(nose.plugins.base.Plugin):
     def configure(self, options, config):
         nose.plugins.Plugin.configure(self, options, config)
 
+    def begin(self):
+        self._test_connections = []
+
     def prepareTestCase(self, test):
         self._test = test
         self._test_proxy = SubprocessTestProxy(self, test)

@@ -63,3 +63,26 @@ Test2
     127.0.0.1:8080
 """,
             output.getvalue())
+
+    def test_resets_itself_in_begin(self):
+        output = StringIO()
+
+        test1 = mock.MagicMock()
+        test2 = mock.MagicMock()
+
+        test1.id.return_value = "Test1"
+        test2.id.return_value = "Test2"
+
+        plugin = ConnectionReportPlugin()
+
+        plugin.begin()
+
+        plugin.add_test_connections(test1, [])
+
+        plugin.begin()
+
+        plugin.add_test_connections(test2, [])
+
+        plugin.report(output)
+
+        self.assertEqual("Test2\n", output.getvalue())
