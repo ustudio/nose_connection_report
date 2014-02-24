@@ -1,4 +1,4 @@
-Running tests in a subprocess
+5Running tests in a subprocess
 =============================
 
 The plugin runs each test in a separate process.
@@ -11,18 +11,18 @@ used!
 
     >>> import nose.plugins
 
-    >>> import nosepipe
+    >>> import nose_connection_report
 
     >>> directory_with_tests = os.path.join(os.path.dirname(__file__),
     ...                                     "test-support")
-    >>> plugins = [nosepipe.ProcessIsolationPlugin(),
-    ...            nosepipe.ProcessIsolationReporterPlugin()]
+    >>> plugins = [nose_connection_report.ConnectionReportPlugin(),
+    ...            nose_connection_report.ProcessIsolationReporterPlugin()]
 
 
 Successful run:
 
     >>> nose.plugins.plugintest.run(
-    ...     argv=["nosetests", "-v", "--with-process-isolation",
+    ...     argv=["nosetests", "-v", "--with-connection-report",
     ...           os.path.join(directory_with_tests, "passing")],
     ...     plugins=plugins)
     ...     # doctest: +REPORT_NDIFF
@@ -40,7 +40,7 @@ Failing run:
     >>> py = os.path.join(directory_with_tests, "failing", "failing_tests.py")
     >>> testname = py + ":failing_test"
     >>> nose.plugins.plugintest.run(
-    ...     argv=["nosetests", "-v", "--with-process-isolation",
+    ...     argv=["nosetests", "-v", "--with-connection-report",
     ...           testname],
     ...     plugins=plugins)
     ...     # doctest: +REPORT_NDIFF
@@ -64,7 +64,7 @@ Erroring run:
     >>> py = os.path.join(directory_with_tests, "failing", "failing_tests.py")
     >>> testname = py + ":erroring_test"
     >>> nose.plugins.plugintest.run(
-    ...     argv=["nosetests", "-v", "--with-process-isolation",
+    ...     argv=["nosetests", "-v", "--with-connection-report",
     ...           testname],
     ...     plugins=plugins)
     ...     # doctest: +REPORT_NDIFF
@@ -86,7 +86,7 @@ Erroring run:
 Multiple failing tests:
 
     >>> nose.plugins.plugintest.run(
-    ...     argv=["nosetests", "-v", "--with-process-isolation",
+    ...     argv=["nosetests", "-v", "--with-connection-report",
     ...           os.path.join(directory_with_tests, "failing")],
     ...     plugins=plugins)
     ...     # doctest: +REPORT_NDIFF
@@ -110,4 +110,4 @@ Multiple failing tests:
     ----------------------------------------------------------------------
     Ran 2 tests in ...s
     <BLANKLINE>
-    FAILED (failures=1, errors=1)
+    FAILED (errors=1, failures=1)

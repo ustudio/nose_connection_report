@@ -1,8 +1,9 @@
-"""Plugin for the nose testing framework for running tests in a subprocess.
+"""Nose plugin for monitoring connections made during test
 
-Use ``nosetests --with-process-isolation`` to enable the plugin.  When enabled,
+Use ``nosetests --with-connection-report`` to enable the plugin.  When enabled,
 each test is run in a separate process.
 
+Copyright 2014 Thomas Stephens <thomas@ustudio.com>
 Copyright 2007 John J. Lee <jjl@pobox.com>
 """
 
@@ -14,7 +15,7 @@ import sys
 
 import nose.plugins
 
-__version__ = "0.3"
+__version__ = "0.1"
 
 SUBPROCESS_ENV_KEY = "NOSE_WITH_PROCESS_ISOLATION_REPORTER"
 
@@ -175,11 +176,11 @@ class SubprocessTestProxy(object):
             popen.wait()
 
 
-class ProcessIsolationPlugin(nose.plugins.Plugin):
+class ConnectionReportPlugin(nose.plugins.Plugin):
 
     """Run each test in a separate process."""
 
-    name = "process-isolation"
+    name = "connection-report"
 
     def __init__(self):
         nose.plugins.Plugin.__init__(self)
