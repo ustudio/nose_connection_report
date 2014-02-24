@@ -9,6 +9,7 @@ Copyright 2007 John J. Lee <jjl@pobox.com>
 
 import os
 import pickle
+import re
 import struct
 import subprocess
 import sys
@@ -123,7 +124,8 @@ class ProcessIsolationReporterPlugin(nose.plugins.Plugin):
 
 
 class SubprocessTestProxy(object):
-    def __init__(self, test):
+    def __init__(self, plugin, test):
+        self._plugin = plugin
         self._test = test
 
     def _name_from_address(self, address):
@@ -172,8 +174,25 @@ class SubprocessTestProxy(object):
                     method_name, exc_pickle = parts
                     exc_info = pickle.loads(exc_pickle.encode("latin1"))
                     getattr(result, method_name)(self._test, exc_info)
+            self.parse_strace(popen.stderr)
         finally:
             popen.wait()
+
+    def parse_strace(self, stderr):
+        connections = []
+        for system_call in stderr:
+            is_inet_connection = re.search(
+                r'connect\(.*sa_family=AF_INET, '
+                r'sin_port=htons\((?P<port>\d+)\), '
+                r'sin_addr=inet_addr\("(?P<addr>[^"]+)"\)',
+                system_call)
+            if is_inet_connection:
+                connections.append({
+                    "host": is_inet_connection.group("addr"),
+                    "port": int(is_inet_connection.group("port"))
+                })
+
+        self._plugin.add_test_connections(self._test, connections)
 
 
 class ConnectionReportPlugin(nose.plugins.Plugin):
