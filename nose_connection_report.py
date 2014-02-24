@@ -140,13 +140,13 @@ class SubprocessTestProxy(object):
 
     def __call__(self, result):
         test_name = self._name_from_address(self._test.address())
-        argv = [os.path.abspath(sys.argv[0]),
+        argv = ['strace', '-e', 'trace=connect', os.path.abspath(sys.argv[0]),
                 '--with-process-isolation-reporter',
                 test_name]
         popen = subprocess.Popen(argv,
                                  cwd=os.getcwd(),
                                  stdout=subprocess.PIPE,
-                                 stderr=subprocess.STDOUT,
+                                 stderr=subprocess.PIPE
                                  )
         try:
             stdout = popen.stdout
