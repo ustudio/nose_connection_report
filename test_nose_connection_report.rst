@@ -48,7 +48,7 @@ Connection report:
     connecting_tests.connecting_test_1
         127.0.0.1:8080
     connecting_tests.connecting_test_2
-        127.0.0.1:8080
+        127.0.0.1:4321
         127.0.0.1:8000
     ----------------------------------------------------------------------
     Ran 2 tests in ...s

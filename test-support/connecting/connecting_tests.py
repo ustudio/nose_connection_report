@@ -10,7 +10,7 @@ def connecting_test_1():
 
 def connecting_test_2():
     try:
-        socket.create_connection(("localhost", 8080))
+        socket.create_connection(("localhost", 4321))
     except:
         pass
 
