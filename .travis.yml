@@ -1,9 +1,15 @@
 language: python
 python:
-  - "2.7"
-  - "3.3"
+- '2.7'
 install:
-  - sudo apt-get -y install strace
-  - pip install -r dev-requirements.txt
-  - python setup.py develop
-script: nosetests -s
+- sudo apt-get -y install strace
+- pip install -r dev-requirements.txt
+- python setup.py develop
+script: nosetests
+deploy:
+  provider: pypi
+  user: ustudio
+  password:
+    secure: eEetDQYeF9UIL1XCnrODSVlsLpGsOxK/u0kaQXG6cCQLhXh7lvNatkYdmGkTDQ5n2VVYvkzVg7v1IS3S5DVj/4cEO+uYf3HEd5p0tdI/RIl+j/c941Qz9P8UrPk2wIbD2O6JWwge0Zh0FqVCcXtbNUKyBsj9CYJ+/XEJU3k15CE=
+  on:
+    tags: true
