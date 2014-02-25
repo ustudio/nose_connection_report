@@ -126,6 +126,59 @@ Test2
 """,
             output.getvalue())
 
+    def test_doesnt_filter_anything_without_ignores(self):
+        output = StringIO()
+
+        test1 = mock.MagicMock()
+        test2 = mock.MagicMock()
+
+        test1.id.return_value = "Test1"
+        test2.id.return_value = "Test2"
+
+        parser = OptionParser()
+
+        plugin = ConnectionReportPlugin()
+
+        plugin.options(parser, {})
+
+        options, _ = parser.parse_args([
+            "--with-connection-report"
+        ])
+
+        plugin.configure(options, None)
+
+        plugin.begin()
+
+        plugin.add_test_connections(
+            test1,
+            [
+                {
+                    "host": "127.0.0.1",
+                    "port": 1234
+                }
+            ]
+        )
+
+        plugin.add_test_connections(
+            test2,
+            [
+                {
+                    "host": "127.0.0.1",
+                    "port": 4321
+                }
+            ]
+        )
+
+        plugin.report(output)
+
+        self.assertEqual(
+            """Test1
+    127.0.0.1:1234
+Test2
+    127.0.0.1:4321
+""",
+            output.getvalue())
+
     def test_requested_connections_are_filtered_out(self):
         output = StringIO()
 
