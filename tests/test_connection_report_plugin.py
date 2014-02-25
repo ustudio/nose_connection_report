@@ -142,6 +142,7 @@ Test2
         plugin.options(parser, {})
 
         options, _ = parser.parse_args([
+            "--with-connection-report",
             "--connection-report-ignore",
             "127.0.0.1:8080",
             "--connection-report-ignore",

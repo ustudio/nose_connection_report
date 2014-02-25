@@ -213,6 +213,7 @@ class ConnectionReportPlugin(nose.plugins.base.Plugin):
         parser.add_option(
             "--connection-report-ignore", dest="connection_report_ignore",
             action="append")
+        super(ConnectionReportPlugin, self).options(parser, env)
 
     def configure(self, options, config):
         self._ignored_connections = options.connection_report_ignore
