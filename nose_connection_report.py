@@ -181,7 +181,6 @@ class SubprocessTestProxy(object):
     def parse_strace(self, stderr):
         connections = []
         for system_call in stderr:
-            print system_call
             is_inet_connection = re.search(
                 r'connect\(.*sa_family=AF_INET, '
                 r'sin_port=htons\((?P<port>\d+)\), '
