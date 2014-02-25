@@ -17,7 +17,7 @@ class TestSubprocessTestProxy(unittest.TestCase):
         test = mock.MagicMock()
         test.address.return_value = ("foo.py", "tests", "TestFoo.test_something")
 
-        base_command = os.path.abspath(sys.argv[0])
+        base_command = sys.argv[0]
         cwd = os.getcwd()
 
         mock_popen = mock_popen_class.return_value
