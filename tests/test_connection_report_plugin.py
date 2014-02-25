@@ -1,4 +1,5 @@
 import mock
+from optparse import OptionParser
 
 from nose_connection_report import ConnectionReportPlugin
 
@@ -122,5 +123,69 @@ Test2
         self.assertEqual(
             """Test1
     127.0.0.1:1234
+""",
+            output.getvalue())
+
+    def test_requested_connections_are_filtered_out(self):
+        output = StringIO()
+
+        test1 = mock.MagicMock()
+        test2 = mock.MagicMock()
+
+        test1.id.return_value = "Test1"
+        test2.id.return_value = "Test2"
+
+        parser = OptionParser()
+
+        plugin = ConnectionReportPlugin()
+
+        plugin.options(parser, {})
+
+        options, _ = parser.parse_args([
+            "--connection-report-ignore",
+            "127.0.0.1:8080",
+            "--connection-report-ignore",
+            "127.0.0.1:8000"
+        ])
+
+        plugin.configure(options, None)
+
+        plugin.begin()
+
+        plugin.add_test_connections(
+            test1,
+            [
+                {
+                    "host": "127.0.0.1",
+                    "port": 1234
+                },
+                {
+                    "host": "127.0.0.1",
+                    "port": 8000
+                }
+            ]
+        )
+
+        plugin.add_test_connections(
+            test2,
+            [
+                {
+                    "host": "127.0.0.1",
+                    "port": 8080
+                },
+                {
+                    "host": "127.0.0.1",
+                    "port": 4321
+                }
+            ]
+        )
+
+        plugin.report(output)
+
+        self.assertEqual(
+            """Test1
+    127.0.0.1:1234
+Test2
+    127.0.0.1:4321
 """,
             output.getvalue())

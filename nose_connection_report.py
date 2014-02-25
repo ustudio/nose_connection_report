@@ -207,9 +207,16 @@ class ConnectionReportPlugin(nose.plugins.base.Plugin):
         self._test_proxy = None
 
         self._test_connections = []
+        self._ignored_connections = []
+
+    def options(self, parser, env):
+        parser.add_option(
+            "--connection-report-ignore", dest="connection_report_ignore",
+            action="append")
 
     def configure(self, options, config):
-        nose.plugins.Plugin.configure(self, options, config)
+        self._ignored_connections = options.connection_report_ignore
+        super(ConnectionReportPlugin, self).configure(options, config)
 
     def begin(self):
         self._test_connections = []
@@ -233,5 +240,9 @@ class ConnectionReportPlugin(nose.plugins.base.Plugin):
             for connection in connections:
                 stream.write("    {0}:{1}\n".format(connection["host"], connection["port"]))
 
+    def _filter_ignored(self, connection):
+        return "{0}:{1}".format(
+            connection["host"], connection["port"]) not in self._ignored_connections
+
     def add_test_connections(self, test, connections):
-        self._test_connections.append((test, connections))
+        self._test_connections.append((test, filter(self._filter_ignored, connections)))
