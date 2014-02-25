@@ -3,7 +3,11 @@ from optparse import OptionParser
 
 from nose_connection_report import ConnectionReportPlugin
 
-from StringIO import StringIO
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
+
 import unittest
 
 
