@@ -4,4 +4,4 @@ python:
 install:
   - pip install -r dev-requirements.txt
   - python setup.py develop
-script: nosetests
+script: nosetests -s

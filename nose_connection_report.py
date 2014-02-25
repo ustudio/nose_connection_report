@@ -145,6 +145,7 @@ class SubprocessTestProxy(object):
         argv = ["strace", "-e", "trace=connect", sys.argv[0],
                 "--with-process-isolation-reporter",
                 test_name]
+        print argv
         popen = subprocess.Popen(argv,
                                  cwd=os.getcwd(),
                                  stdout=subprocess.PIPE,
