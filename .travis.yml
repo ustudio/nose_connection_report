@@ -3,6 +3,6 @@ python:
   - "2.7"
   - "3.3"
 install:
-  - pip install -r dev-requirements.txt
-  - python setup.py install
+  - pip install -I -r dev-requirements.txt
+  - pip install -I .
 script: nosetests
