@@ -35,6 +35,27 @@ Successful run:
     OK
 
 
+Connection report:
+
+    >>> nose.plugins.plugintest.run(
+    ...     argv=["nosetests", "-v", "--with-connection-report",
+    ...           os.path.join(directory_with_tests, "connecting")],
+    ...     plugins=plugins)
+    ...     # doctest: +REPORT_NDIFF
+    connecting_tests.connecting_test_1 ... ok
+    connecting_tests.connecting_test_2 ... ok
+    <BLANKLINE>
+    connecting_tests.connecting_test_1
+        127.0.0.1:8080
+    connecting_tests.connecting_test_2
+        127.0.0.1:8080
+        127.0.0.1:8000
+    ----------------------------------------------------------------------
+    Ran 2 tests in ...s
+    <BLANKLINE>
+    OK
+
+
 Failing run:
 
     >>> py = os.path.join(directory_with_tests, "failing", "failing_tests.py")
