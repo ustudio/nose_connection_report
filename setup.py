@@ -4,8 +4,7 @@ from setuptools import setup
 
 setup(
     name="nose_connection_report",
-    version="0.1",
-    download_url = "http://pypi.python.org/pypi/nosepipe/",
+    version="0.2",
 
     description = "Nose testing framework plugin for monitoring network connections",
     author = "Thomas Stephens, John J. Lee, Dan McCombs",
